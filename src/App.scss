@@ -1,0 +1,255 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400;500;600;700;800&display=swap');
+
+@mixin flexIt($direction) {
+  display: flex;
+  flex-flow: $direction nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+:root{
+--yellow: #FFEEAD;
+--red: #D9534F;
+--orange: #FFAD60;
+--green: #96CEB4;
+--dark: rgb(28, 28, 28);
+--egg: rgb(248, 248, 248); 
+--gray: rgb(234, 234, 234); ;
+--blue: #302e4d;
+--bluevar: #434671;
+}
+
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+
+.App{
+  width: 100vw;
+@include flexIt(column);
+}
+
+form{
+  display: inherit;
+  flex-flow: inherit;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+body{
+  background: var(--blue);
+  @include flexIt(column);
+  font-family: "Source Code Pro", Arial, Helvetica, sans-serif;
+}
+
+
+
+.rowContainer{
+  @include flexIt(row);
+  justify-content: space-around;
+  width: 130vmin;
+background: var(--egg);
+border-radius: 2vmin;
+margin-bottom: 2vmin;
+padding-left: 3vmin;
+
+}
+
+
+.category{
+  padding: 5vmin;
+  width: 20vmin;
+  height: 10vmin;
+  text-align: center;
+}
+
+.item{
+@include flexIt(row);
+justify-content: flex-start;
+  width: 30vmin;
+  height: 10vmin;
+  text-align: center;
+  font-size: 3vmin;
+  font-weight: normal;
+  margin: 0;
+}
+
+
+#title{
+  font-size: 6.5vmin;
+  width: 100%;
+  text-align: center;
+  margin-top: 7vmin;
+  color: white;
+  font-family: "Source Code Pro", Arial, Helvetica, sans-serif;
+}
+
+.categoryTitle{
+  font-size: 5vmin;
+  position: relative;
+  left: 3vmin;
+}
+
+.point{
+  cursor: pointer;
+  z-index: 3;
+  color: white;
+}
+
+
+
+#edit{
+  position: relative;
+  left: -40vmin;
+  top: 15vmin;
+}
+
+.pencil{
+font-size: 5vmin;
+color: black !important;
+padding-right: 1vmin;
+}
+
+.cross{
+  font-size: 6vmin;
+  color: black !important;
+}
+
+.save{
+  font-size: 8vmin;
+  position: relative;
+  top: 2vmin;
+}
+
+.icons{
+  display: flex;
+flex-flow: row nowrap;
+justify-content: flex-end !important;
+align-items: center;
+  margin-left: 5vmin;
+}
+
+h3{
+  margin-bottom: 7vmin;
+}
+
+input{
+  color: black;
+  height: 4vmin;
+  padding: 1.5vmin;
+  border: none;
+  border-radius: 1vmin;
+  margin-right: 3vmin;
+  margin-left: 3vmin;
+  width: 25vmin;
+  font-family: "Source Code Pro", Arial, Helvetica, sans-serif;
+
+}
+
+.inputs{
+  @include flexIt(row);
+}
+
+.bigInput{
+  text-align: center;
+  padding: 2vmin;
+  margin: 5vmin;
+  width: 81vmin;
+  height: 7vmin;
+  font-size: 6vmin;
+}
+
+.confirm{
+  @include flexIt(row);
+  font-size: 6vmin;
+}
+
+.check{
+  position: relative;
+  left: -6.2vmin;
+  cursor: pointer;
+  z-index: 3;
+}
+
+button{
+  font-family: "Source Code Pro", Arial, Helvetica, sans-serif;
+  background: var(--bluevar);
+  color: white;
+  align-self: center;
+  padding: 2vmin;
+  font-size: 2vmin;
+  cursor: pointer;
+border-radius: 1vmin;
+  margin-right: 2vmin;
+  width: 15vmin;
+border: none;
+}
+
+button:hover{
+  transform: scale(0.96);
+  background: rgb(77, 77, 118);
+}
+
+.budgetBut{
+  position: relative;
+  top: -1.5vmin;
+  box-shadow: none;
+  margin-left: 2vmin;
+}
+
+
+.buttons{
+  @include flexIt(row);
+  margin-bottom: 7vmin;
+}
+
+
+.green{
+  color: green
+}
+
+.red{
+  color: red;
+}
+
+.input{
+  height: 10vmin;
+  width: 29.5vmin;
+  font-size: 4.5vmin;
+}
+
+
+.total{
+  color: white;
+  font-size: 3vmin;
+}
+
+.errorInput{
+  @include flexIt(row);
+}
+
+.errorMsg{
+  position: absolute;
+  top: 18vmin;
+  color: rgb(255, 97, 97);
+  font-size: 2vmin;
+  font-weight: bolder;
+}
+
+.bounceIt{
+  animation: bounce 1s ease-in-out forwards;
+  border: 4px rgb(255, 109, 109) inset;
+}
+
+@keyframes bounce {
+  0%   { transform: scale(1,1)    translateY(0); }
+  10%  { transform: scale(1.05,.95) translateY(0); }
+  30%  { transform: scale(.95,1.05) translateY(-0.6vmin); }
+  50%  { transform: scale(1,1)    translateY(0); }
+  60% {transform: translateY(-0.6vmin)}
+  100% { transform: scale(1,1)    translateY(0); }
+}
