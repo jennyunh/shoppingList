@@ -1,12 +1,16 @@
 /* eslint-disable array-callback-return */
-/* eslint-disable no-unused-vars */
+//replace dom references with useRef....
+
 import "./App.scss";
-import { useState, useEffect } from "react";
 import Item from "./Item.js";
 import Title from "./Title";
 import Total from "./Total";
+import React, { useState, useEffect, useRef } from "react";
 
-/*INITIAL STATE VALUES */
+/*-----------------------*/
+/*  INITIAL STATE VALUES */
+/*-----------------------*/
+
 const initialList = [
   {
     name: "apple",
@@ -24,7 +28,7 @@ const initialList = [
 const initialPrice = 0;
 const blankArray = [];
 const initialTitle = "Click to Name List";
-const regex = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
+const regex = /^$|^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
 
 function App() {
   /*------------------ */
@@ -35,6 +39,7 @@ function App() {
   const [editItem, setEditItem] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
   const [title, setTitle] = useState(initialTitle);
+  const [clicked, setClicked] = useState(false);
 
   //Keeps track of the item name and price input boxes (above additem button).
   const [inputName, setinputName] = useState("");
@@ -47,7 +52,16 @@ function App() {
   const [error, setError] = useState(false);
   const [errorHappened, setErrorHappened] = useState(false);
 
-  //After dom updates 
+  /*-----------------------*/
+  /*          REFS         */
+  /*-----------------------*/
+  const nameinput1 = useRef();
+  const priceinput1 = useRef();
+
+  /*-----------------------*/
+  /*        USE EFFECT     */
+  /*-----------------------*/
+  //After dom updates
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     //calculate total price when DOM updates
@@ -59,19 +73,18 @@ function App() {
     let bigInput = document.getElementById("bigInput");
 
     if (bigInput) {
-      console.log("biginput ezists");
       bigInput.focus();
     }
 
-
     //focus on price input immediately when clicking on it after error msg
     let noErrorInput = document.getElementById("itemPrice2");
-if ((noErrorInput) && (errorHappened)) {
-  noErrorInput.focus();
-  setErrorHappened(false);
-}
-
+    if (noErrorInput && errorHappened) {
+      noErrorInput.focus();
+      setErrorHappened(false);
+    }
   });
+
+  //END OF USE EFFECT
 
   //Calculates the total price
   function totalPrice() {
@@ -85,14 +98,12 @@ if ((noErrorInput) && (errorHappened)) {
     return roundedTotal;
   }
 
-
   /*--------------------------------- */
   /*   UPDATE INPUT VALUE TO STATE    */
   /*--------------------------------- */
   /*Whenever you edit title in the input field, save the input value into the inputTitle state */
   function updateInputTitle(e) {
     setinputTitle(e.target.value);
-    console.log("TITLE input changed " + inputTitle);
   }
 
   //Save input value of "item name" input (above additem button) to the state inputname.
@@ -108,7 +119,6 @@ if ((noErrorInput) && (errorHappened)) {
     if (priceStr === "" || regex.test(priceStr)) {
       setError(false);
       setinputPrice(parseFloat(priceStr));
-      console.log("inputPrice parsed is " + parseFloat(priceStr));
     }
     //price is not a number so ERROR
     else {
@@ -118,9 +128,15 @@ if ((noErrorInput) && (errorHappened)) {
   }
 
   //When item's name input value changes, update the NewName state.
-  function updateNewName(e) {
+  function updateNewName(e, ind, id) {
     setNewName(e.target.value);
-    console.log("input changed " + newName);
+
+    if (clicked) {
+      let theTarget = document.getElementsByName("itemprice");
+      let val = theTarget[0].value;
+setNewPrice(parseFloat(val));
+    }
+    
   }
 
   //item's price input value updated to the NewPrice state.
@@ -131,14 +147,19 @@ if ((noErrorInput) && (errorHappened)) {
     if (regex.test(priceStr)) {
       setError(false);
       setNewPrice(parseFloat(priceStr));
-      console.log("inputNEWPrice parsed is " + parseFloat(priceStr));
+
+      if (clicked) {
+        let theTarget = document.getElementsByName("itemname");
+        let val = theTarget[0].value;
+  setNewName(val);
+      }
+
+
     } else {
       setError(true);
       setErrorHappened(true);
     }
   }
-
-
 
   /*----------------------*/
   /*----ITEM FUNCTIONS----*/
@@ -146,10 +167,13 @@ if ((noErrorInput) && (errorHappened)) {
 
   /*ADD, REMOVE, OR CLEAR ITEMS */
   function addItem(e, ind) {
+
     let copyList = [...list];
     let obj = {};
+    //set new item's name to the input name
     obj.name = inputName;
 
+    //if there is no error (price is only numbers):
     if (error === false) {
       obj.price = inputPrice;
       obj.id = inputName + copyList.length;
@@ -185,37 +209,54 @@ if ((noErrorInput) && (errorHappened)) {
   }
 
   function clearItems() {
+
+    let txt;
+    if (window.confirm("Are you sure you want to clear all items?")) {
+    txt="yes";
+    console.log("yes");
+
     setList(blankArray);
     setinputPrice(0);
     setinputName("");
     setNewName("");
     setNewPrice(0);
     let nameinput = document.getElementById("itemName");
-    let priceinput = document.getElementById("itemPrice2");
+    let priceinput2 = document.getElementById("itemPrice2");
     nameinput.value = "";
-    priceinput.value = 0;
+    priceinput2.value = 0;
+    }
+
+    else {txt = "no"
+    console.log("no")}
+
   }
 
   /* EDIT ITEM BUTTON CLICKED*/
-  function handleEdit() {
-    setEditItem(!editItem);
+  function handleEdit(e, ind, id) {
+    //The ID of the item clicked is sent to the child
+   setClicked(id);
+   setEditItem(!editItem)
   }
 
-  /*SAVE ITEM*/
-  function saveItem(e, ind) {
+  /*SAVE ITEM FROM ITEM INPUTS*/
+  function saveItem(e, ind, id) {
     setEditItem(!editItem);
     let copyList = [...list];
     copyList[ind].name = newName;
     copyList[ind].price = newPrice;
+    setClicked(null);
   }
 
-  /*ENTER FOR ITEM NAME*/
+  /*ENTER FOR ITEM PRICE AND NAME*/
   function handleKey(e, ind) {
     if (e.key === "Enter") {
+      e. preventDefault()
       setEditItem(!editItem);
       let copyList = [...list];
       copyList[ind].name = newName;
       copyList[ind].price = newPrice;
+      setClicked(null);
+
     }
   }
 
@@ -233,7 +274,6 @@ if ((noErrorInput) && (errorHappened)) {
   /*EDIT TITLE CLICKED*/
   function editTitleMode(e) {
     setEditTitle(!editTitle);
-
   }
 
   /*SAVE TITLE*/
@@ -242,7 +282,10 @@ if ((noErrorInput) && (errorHappened)) {
     setTitle(inputTitle);
   }
 
-  /*RENDER */
+  /*---------------- */
+  /*      RENDER     */
+  /*---------------- */
+
   return (
     <div className="App">
       <Title
@@ -257,6 +300,7 @@ if ((noErrorInput) && (errorHappened)) {
       {/* ITEM NAME INPUT */}
       <div className="inputs">
         <input
+          ref={nameinput1}
           type="text"
           id="itemName"
           onChange={updateInputName}
@@ -283,6 +327,7 @@ if ((noErrorInput) && (errorHappened)) {
           </div>
         ) : (
           <input
+            ref={priceinput1}
             type="text"
             id="itemPrice2"
             onChange={updateInputPrice}
@@ -318,9 +363,13 @@ if ((noErrorInput) && (errorHappened)) {
             onAdd={addItem}
             nameChange={updateNewName}
             priceChange={updateNewPrice}
+            list={list}
+            clicked = {clicked}
           ></Item>
         );
-      })}
+      }
+      )
+      }
 
       <Total totalprop={totalVal}></Total>
     </div>

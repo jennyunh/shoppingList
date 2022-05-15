@@ -2,7 +2,7 @@
   "name": "tutorial",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://jennyunh.github.io/shoppingList",
+  "homepage": "https://jennyunh.github.io/shoppingList/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.1",
